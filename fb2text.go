@@ -17,12 +17,16 @@ only: book title, first and last author names, sequence, genre, and
 text language (not the original book language)
 */
 type BookInfo struct {
+	Authors  []Author
+	Title    string
+	Sequence string
+	Language string
+	Genre    string
+}
+
+type Author struct {
 	FirstName string
 	LastName  string
-	Title     string
-	Sequence  string
-	Language  string
-	Genre     string
 }
 
 /*
@@ -239,9 +243,12 @@ func ParseBook(fileName string, opts ...FOption) (BookInfo, []string) {
 				if se.Name.Local == "genre" {
 					binfo.Genre = currLine
 				} else if se.Name.Local == "first-name" && isInside(tags, "author") {
-					binfo.FirstName = currLine
+					binfo.Authors = append(binfo.Authors, Author{FirstName: currLine})
 				} else if se.Name.Local == "last-name" && isInside(tags, "author") {
-					binfo.LastName = currLine
+					last := len(binfo.Authors) - 1
+					author := binfo.Authors[last]
+					author.LastName = currLine
+					binfo.Authors[last] = author
 				} else if se.Name.Local == "book-title" {
 					binfo.Title = currLine
 				} else if se.Name.Local == "lang" {
