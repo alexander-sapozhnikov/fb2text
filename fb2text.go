@@ -188,6 +188,10 @@ func ParseBook(fileName string, opts ...FOption) (BookInfo, []string) {
 		decoder = xml.NewDecoder(xmlFile)
 	}
 
+	if decoder == nil {
+		return binfo, lines
+	}
+
 	decoder.CharsetReader = charset.NewReaderLabel
 
 	var currLine string
