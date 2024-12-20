@@ -1,6 +1,6 @@
 module github.com/alexander-sapozhnikov/fb2text
 
-go 1.21
+go 1.23
 
 require (
 	github.com/huandu/xstrings v1.5.0
