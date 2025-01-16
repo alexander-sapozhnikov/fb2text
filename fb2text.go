@@ -247,12 +247,25 @@ func ParseBook(fileName string, opts ...FOption) (BookInfo, []string) {
 				if se.Name.Local == "genre" {
 					binfo.Genre = currLine
 				} else if se.Name.Local == "first-name" && isInside(tags, "author") {
-					binfo.Authors = append(binfo.Authors, Author{FirstName: currLine})
+					if len(binfo.Authors) > 0 &&
+						binfo.Authors[len(binfo.Authors)-1].FirstName == "" {
+						last := len(binfo.Authors) - 1
+						author := binfo.Authors[last]
+						author.FirstName = currLine
+						binfo.Authors[last] = author
+					} else {
+						binfo.Authors = append(binfo.Authors, Author{FirstName: currLine})
+					}
 				} else if se.Name.Local == "last-name" && isInside(tags, "author") {
-					last := len(binfo.Authors) - 1
-					author := binfo.Authors[last]
-					author.LastName = currLine
-					binfo.Authors[last] = author
+					if len(binfo.Authors) > 0 &&
+						binfo.Authors[len(binfo.Authors)-1].LastName == "" {
+						last := len(binfo.Authors) - 1
+						author := binfo.Authors[last]
+						author.LastName = currLine
+						binfo.Authors[last] = author
+					} else {
+						binfo.Authors = append(binfo.Authors, Author{LastName: currLine})
+					}
 				} else if se.Name.Local == "book-title" {
 					binfo.Title = currLine
 				} else if se.Name.Local == "lang" {
